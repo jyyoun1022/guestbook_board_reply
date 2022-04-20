@@ -5,9 +5,14 @@ import org.codeJ.guestbook_board_reply.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -56,9 +61,31 @@ public class BoardRepositoryTests {
         Object result = repository.getBoardWithWriter(100L);
 
         Object[] result1 = (Object[]) result;
+
         System.out.println("============");
+        System.out.println(result1);
         System.out.println(Arrays.toString(result1));
         //자바에서 배열 내용을 출력해보려고 배열 자체에서 toString()를 사용하면 배열의 내용이 아니라 배열의 주소값이 출력됩니다.
-        //배열의 내용을 출력할때는 Arrays.toString을 사용합니다.
+        //배열의 내용을 출력할때는 Arrays.toString()을 사용합니다.
+    }
+
+    @Test
+    public void testWithReplyCount(){
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+
+        Page<Object[]> result = repository.getBoardWithReplyCount(pageable);
+
+        List<Object[]> content = result.getContent();
+        content.stream().forEach(row -> System.out.println(Arrays.toString(row)));
+    }
+    @Test
+    public void testRead3(){
+
+        Object result = repository.getBoardByBno(100L);
+
+        Object[] arr = (Object[]) result;
+
+        System.out.println(Arrays.toString(arr));
     }
 }
