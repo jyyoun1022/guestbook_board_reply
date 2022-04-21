@@ -24,4 +24,11 @@ public class Board extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;  //다수의 게시물은 하나의 member 에서 나오므로 ManyToOne
 
+    public void changeTitle(String title){
+        this.title=title;
+    }
+    public void changeContent(String content){
+        this.content=content;
+    }
+
 }

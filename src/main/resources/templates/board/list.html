@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <h1 class="mt-4">게시판 목록
+        <span>
+            <a th:href="@{/board/register}">
+                <button class="btn btn-outline-primary" type="button">등록하기</button>
+            </a>
+        </span>
+        </h1>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">등록일</th>
+           </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dto : ${result.dtoList}">
+                <th scope="row">
+                    <a th:href="@{/board/read(bno=${dto.bno},page=${requestDTO.page},type=${requestDTO.type},keyword=${requestDTO.keyword})}">
+                        [[${dto.bno}]]
+                    </a>
+                </th>
+                <th>[[${dto.title}]]-----[<b th:text="${dto.replyCount}"/>]></th>
+                <td>[[${dto.memberName}]] <small>[[${dto.memberEmail}]]</small></td>
+                <td>[[${#temporals.format(dto.regDate,'yyyy/MM/dd')}]]</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <ul class="pagination h-100 justify-content-center align-items-center">
+            <li class="page-item" th:if="${result.prev}">
+                <a class="page-link" th:href="@{/board/list(page=${result.start-1},type=${requestDTO.type},keyword=${requestDTO.keyword})}" tabindex="-1">
+                    이전페이지
+                </a>
+            </li>
+            <li th:class=" 'page-item ' +${result.page == page? 'active':'' } " th:each="page : ${result.pageList}">
+                <a class="page-link" th:href="@{/board/list(page=${page},
+                type=${requestDTO.type},keyword=${requestDTO.keyword})}">
+                    [[${page}]]
+                </a>
+            </li>
+            <li class="page-item" th:if="${result.next}">
+                <a class="page-link" th:href="@{/board/list(page=${result.end+1},type=${requestDTO.type},keyword=${requestDTO.keyword})}">
+                    다음페이지
+                </a>
+            </li>
+        </ul>
+
+
+
+    </th:block>
+</th:block>
+</html>
