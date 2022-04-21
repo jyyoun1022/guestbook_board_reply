@@ -2,6 +2,7 @@ package org.codeJ.guestbook_board_reply.repository;
 
 import org.codeJ.guestbook_board_reply.entity.Board;
 import org.codeJ.guestbook_board_reply.entity.Member;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -92,6 +93,22 @@ public class BoardRepositoryTests {
     @Test
     public void testSearch1(){
         repository.search1();
+    }
+
+    @Test
+    public void testSearchPage(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+
+        Page<Object[]> result = repository.searchPage("t", "1", pageable);
+
+    }
+    @Test
+    @DisplayName("검색페이지")
+    public void testSearch(){
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending().and(Sort.by("title").ascending()));
+
+        Page<Object[]> result = repository.searchPage("t", "1", pageable);
     }
 
 }
