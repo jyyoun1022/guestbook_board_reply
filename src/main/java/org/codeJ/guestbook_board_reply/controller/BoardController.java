@@ -34,7 +34,7 @@ public class BoardController {
 
         Long bno = boardService.register(boardDTO);
         log.info(bno+" 번이 신규 등록 되었습니다.");
-        re.addFlashAttribute("msg",bno);
+        re.addFlashAttribute("regMSG",bno);
 
         return "redirect:/board/list";
     }
@@ -44,7 +44,7 @@ public class BoardController {
         log.info("Get Register");
     }
 
-    @GetMapping("/read")
+    @GetMapping({"/read","/modify"})
     public void read(Model model,
                      @RequestParam(value = "bno" ,defaultValue = "1",required = true)Long bno,
                      @ModelAttribute("requestDTO")PageRequestDTO requestDTO
@@ -53,6 +53,32 @@ public class BoardController {
         BoardDTO boardDTO = boardService.get(bno);
 
         model.addAttribute("dto",boardDTO);
+    }
+    @PostMapping("/modify")
+    public String modify(@ModelAttribute("dto")BoardDTO boardDTO,
+                         @ModelAttribute("requestDTO")PageRequestDTO requestDTO,
+                         RedirectAttributes re){
+
+        boardService.modify(boardDTO);
+
+        re.addAttribute("page",requestDTO.getPage());
+        re.addAttribute("type",requestDTO.getType());
+        re.addAttribute("keyword",requestDTO.getKeyword());
+        re.addAttribute("bno",boardDTO.getBno());
+
+        return "redirect:/board/read";
+
+
+    }
+
+    @PostMapping("/remove")
+    public String remove(Long bno,RedirectAttributes re){
+
+        boardService.removeWithReplies(bno);
+
+        re.addFlashAttribute("delMSG",bno);
+
+        return "redirect:/board/list";
     }
 
 }
