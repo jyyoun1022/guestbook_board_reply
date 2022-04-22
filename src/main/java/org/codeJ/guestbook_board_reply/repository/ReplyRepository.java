@@ -1,5 +1,6 @@
 package org.codeJ.guestbook_board_reply.repository;
 
+import org.codeJ.guestbook_board_reply.entity.Board;
 import org.codeJ.guestbook_board_reply.entity.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,4 +15,7 @@ public interface ReplyRepository extends JpaRepository<Reply,Long> {
     @Modifying
     @Query("delete from Reply r where r.board.bno =:bno")
     void deleteByBno(@Param("bno")Long bno);
+
+    List<Reply> getRepliesByBoardOrderByRno(Board board);   //쿼리 메서드로 작성
+
 }
